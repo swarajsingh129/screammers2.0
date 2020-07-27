@@ -9,7 +9,7 @@ class Post(models.Model):
     caption = models.CharField(max_length=200)
     date = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     image = models.ImageField(upload_to="user_image", blank=True, null=True)
-
+    likes = models.IntegerField(default=0)
     def __str__(self):
         return self.user.username + " " + str(self.date) 
 

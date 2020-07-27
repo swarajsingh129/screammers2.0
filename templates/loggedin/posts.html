@@ -48,47 +48,53 @@
 {% endblock navbtn2 %}
 
 {% block body %}
-<div class="container my-4">
-  <div class="card">
-    <div class="card-header">
-      Username
-    </div>
-    <div class="card-body">
-      <p class="card-title">caption</p>
-      <p class="card-text">media</p>
-      <hr>
-      <a href="#" class="btn btn-primary ml-3">Like</a>
-      <a href="#" class="btn btn-success ml-3">comment</a>
-      <a href="#" class="btn btn-danger ml-3">share</a>
-    </div>
-  </div>
-</div>
 
 
-{% block jsonn %}
-
-<div id="posts">  
+<div id="posts">
   jsonn loading ....
 </div>
-                          
+
 
 <script>
   const xhr = new XMLHttpRequest()
   const method = "GET"
   const url = "json"
-  const responseType = "json"
+ // const responseType = "json"
 
-  xhr.responseType = responseType
+ function handlelike(scream_id,count){
+    console.log("likes "+count)
+ }
+
+function like(scream){
+  return "<button class='btn btn-danger' onclick=handlelike("+scream.id+
+           ","+scream.likes+")>Like</button> "
+}
+
+ function formatscreams(scream){
+
+  var formated='<div class="mb-4 primary"><h2>' + scream.id + "</h1>" + "<h5>" + scream.caption + 
+    "</h5><p><div>"+like(scream) +"</div></p></div>"
+    return formated
+ }
+ // xhr.responseType = responseType
   xhr.open(method, url)
   xhr.onload = function () {
-    console.log(xhr.response)
+    if (this.readyState == 4 && this.status == 200) {
+      myObj = JSON.parse(this.responseText);
+      // console.log(xhr.response)
+      screamelement = document.getElementById("posts")
+      var finalposts = ""
+      for (x in myObj) {
+        console.log(myObj[x])
+        var obj = myObj[x]
+        var currentpost = formatscreams(obj)
+        finalposts += currentpost
+      }
+      screamelement.innerHTML = finalposts
+    }
+}
 
-  }
   xhr.send()
 </script>
-
-
-{% endblock jsonn %}
-
 
 {% endblock body %}
