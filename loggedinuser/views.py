@@ -7,11 +7,11 @@ from rest_framework import status
 from .serializers import Postserializer
 from .models import Post
 from django.shortcuts import render
-
+from rest_framework.permissions import IsAuthenticated
 from django.http.response import JsonResponse
 from rest_framework.parsers import JSONParser 
 from rest_framework import status
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view ,permission_classes
 # Create your views here.
 
 
@@ -40,7 +40,7 @@ def userhome(request):
 
 
 
-
+@permission_classes((IsAuthenticated, ))
 @api_view(['GET', 'POST', 'DELETE'])
 def Post_list(request):
     if request.method == 'GET':
@@ -49,12 +49,13 @@ def Post_list(request):
         return JsonResponse(serialize.data, safe=False)
             # 'safe=False' for objects serialization
     elif request.method == 'POST':
-        post_data = JSONParser().parse(request)
-        serializer = Postserializer(data=post_data)
-        if serializer.is_valid():
+        serializer = Postserializer(data=request.data)
+       
+        if serializer.is_valid():   
             serializer.save()
-            return JsonResponse(serializer.data, status=status.HTTP_201_CREATED) 
-        return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            print(serializer.save())
+            return JsonResponse(serializer.data, status=status.HTTP_201_CREATED,safe=True)
+        return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST,safe=True)
         
       #  elif request.method == 'DELETE':
       #      count = Tutorial.objects.all().delete()

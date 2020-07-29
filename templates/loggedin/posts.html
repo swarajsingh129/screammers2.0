@@ -33,7 +33,7 @@
             <button type="button" class="btn btn-secondary" data-dismiss="modal">
               Close
             </button>
-            <button type="submit" id="button11" class="btn btn-primary" onclick="sendJSON();return false">Post</button>
+            <button type="submit" id="button11" class="btn btn-primary" onclick="sendJSON(); return false">Post</button>
           </div>
         </form>
       </div>
@@ -63,77 +63,65 @@
   const csrftoken = getCookie('csrftoken');
 
   function sendJSON() {
-    console.log("djdjdjdd")
-   const url = "json"
+   // console.log("djdjdjdd")
    
-   fetch(url,{
-     method :"POST",
-     headers:{
-       "Content-type":"application/json",
-       "X-CSRFToken": csrftoken
-           },
-    body : JSON.stringify({ "caption":'yogesh@makitweb.com' , "user":"1"})
-     }).then(function(response){
-       console.log("done")
-     })
+    $.ajax({
+      type: "POST",
+      url: 'json',
+      dataType: "json",
+      data: {
+        "caption": "jsonffaxsssssssssaxdcdcff",
+        "image": null,
+        "likes": 0434,
+        "user": 1
+        
+      },
+      headers:
+      {
+        'X-CSRFToken': csrftoken
 
-    }
-
-
-
-
-
-
-
-
-
-/*    
-     $.ajax({
-       type: "POST",
-       url: 'json',
-       dataType:"json",
-       
-       // data: {"csrfmiddlewaretoken": "{{ csrf_token }}"},
-       
-       data: { 
-       "caption": "jsonffaxaxdcdcff",     
-       "image": null,
-       "likes": 0434 ,
-       "user":1
-       },
-       headers: 
-       {
-           'X-CSRF-TOKEN': csrftoken,
-           "ContentType": "application/json"
-       },
-       success: function (data) {
-         console.log(data)
-       }
-     });
-  
-
-
-
-
-
-    var xhttp = new XMLHttpRequest();
-    xhttp.open("POST", "json", true);
-   // xhttp.setRequestHeader("Content-Type","application/json");
-   xhttp.setRequestHeader('X-CSRF-Token',csrftoken,"Content-Type","application/json")
-    console.log(this.responseText)
-    xhttp.onload = function () {
-      if (this.readyState == 4 && this.status == 200) {
-        // Response
-        var response = this.responseText;
+      },
+      success: function (data) {
+        console.log(data)
       }
-    };
-    var data = { "user": '1', "caption":'yogesh@makitweb.com'};
-    xhttp.send(JSON.stringify(data));
+    });
+  }
+ /*
 
-
-    */
+ /*  const url = "json"
+     
+     fetch(url,{
+       method :"POST",
+       headers:{
+        
+         "X-CSRFToken": csrftoken
+             },
+      body : JSON.stringify({
+        
+        "caption": "gss",
+        
+        "image": null,
+        "likes": 7,
+        
+    })
+       }).then(function(response){
+         console.log("done")
+       })
   
-
+      }     var xhttp = new XMLHttpRequest();
+      xhttp.open("POST", "json", true);
+     // xhttp.setRequestHeader("Content-Type","application/json");
+     xhttp.setRequestHeader('X-CSRF-Token',csrftoken)
+      console.log(this.responseText)
+      xhttp.onload = function () {
+        if (this.readyState == 4 && this.status == 200) {
+          // Response
+          var response = this.responseText;
+        }
+      };
+      var data = { "caption":'yogesh@makitweb.com'};
+      xhttp.send(data);
+    }*/
 </script>
 {% endblock js2 %}
 
