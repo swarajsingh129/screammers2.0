@@ -6,7 +6,12 @@ from rest_framework.response import Response
 from rest_framework import status
 from .serializers import Postserializer
 from .models import Post
+from django.shortcuts import render
 
+from django.http.response import JsonResponse
+from rest_framework.parsers import JSONParser 
+from rest_framework import status
+from rest_framework.decorators import api_view
 # Create your views here.
 
 
@@ -15,17 +20,44 @@ def userhome(request):
     return render(request, "loggedin/posts.html")
 
 
-class Post_list(APIView):
-    def get(self, request):
+
+''' def get(self, request):
         post = Post.objects.all()
         serialize = Postserializer(post,many=True)
         return Response(serialize.data)
 
-    '''def post(self, request):
-        pass'''
+    
     def post(self,request):
         serializer = Postserializer(data=request.data)
+        print("helohelo")
         if serializer.is_valid():
+            
             serializer.save()
             return Response(serializer.data,status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_404_NOT_FOUND)
+'''
+
+
+
+
+
+@api_view(['GET', 'POST', 'DELETE'])
+def Post_list(request):
+    if request.method == 'GET':
+        post = Post.objects.all()
+        serialize = Postserializer(post,many=True)
+        return JsonResponse(serialize.data, safe=False)
+            # 'safe=False' for objects serialization
+    elif request.method == 'POST':
+        post_data = JSONParser().parse(request)
+        serializer = Postserializer(data=post_data)
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse(serializer.data, status=status.HTTP_201_CREATED) 
+        return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+      #  elif request.method == 'DELETE':
+      #      count = Tutorial.objects.all().delete()
+       #     return JsonResponse({'message': '{} Tutorials were deleted successfully!'.format(count[0])}, status=status.HTTP_204_NO_CONTENT)
+
+            

@@ -23,7 +23,7 @@
           {% csrf_token %}
 
           <label for="image">Image : </label>
-          <input type="file" />
+          <input type="file" id="image" />
           <br />
 
           <label for="caption">Caption : </label>
@@ -33,13 +33,111 @@
             <button type="button" class="btn btn-secondary" data-dismiss="modal">
               Close
             </button>
-            <button type="submit" class="btn btn-primary">Post</button>
+            <button type="submit" id="button11" class="btn btn-primary" onclick="sendJSON();return false">Post</button>
           </div>
         </form>
       </div>
     </div>
   </div>
 </div>
+
+
+{% block js2 %}
+
+<script>
+  function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+      const cookies = document.cookie.split(';');
+      for (let i = 0; i < cookies.length; i++) {
+        const cookie = cookies[i].trim();
+        // Does this cookie string begin with the name we want?
+        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+          break;
+        }
+      }
+    }
+    return cookieValue;
+  }
+  const csrftoken = getCookie('csrftoken');
+
+  function sendJSON() {
+    console.log("djdjdjdd")
+   const url = "json"
+   
+   fetch(url,{
+     method :"POST",
+     headers:{
+       "Content-type":"application/json",
+       "X-CSRFToken": csrftoken
+           },
+    body : JSON.stringify({ "caption":'yogesh@makitweb.com' , "user":"1"})
+     }).then(function(response){
+       console.log("done")
+     })
+
+    }
+
+
+
+
+
+
+
+
+
+/*    
+     $.ajax({
+       type: "POST",
+       url: 'json',
+       dataType:"json",
+       
+       // data: {"csrfmiddlewaretoken": "{{ csrf_token }}"},
+       
+       data: { 
+       "caption": "jsonffaxaxdcdcff",     
+       "image": null,
+       "likes": 0434 ,
+       "user":1
+       },
+       headers: 
+       {
+           'X-CSRF-TOKEN': csrftoken,
+           "ContentType": "application/json"
+       },
+       success: function (data) {
+         console.log(data)
+       }
+     });
+  
+
+
+
+
+
+    var xhttp = new XMLHttpRequest();
+    xhttp.open("POST", "json", true);
+   // xhttp.setRequestHeader("Content-Type","application/json");
+   xhttp.setRequestHeader('X-CSRF-Token',csrftoken,"Content-Type","application/json")
+    console.log(this.responseText)
+    xhttp.onload = function () {
+      if (this.readyState == 4 && this.status == 200) {
+        // Response
+        var response = this.responseText;
+      }
+    };
+    var data = { "user": '1', "caption":'yogesh@makitweb.com'};
+    xhttp.send(JSON.stringify(data));
+
+
+    */
+  
+
+</script>
+{% endblock js2 %}
+
+
 
 {% endblock navbtn1 %}
 
@@ -59,24 +157,24 @@
   const xhr = new XMLHttpRequest()
   const method = "GET"
   const url = "json"
- // const responseType = "json"
+  // const responseType = "json"
 
- function handlelike(scream_id,count){
-    console.log("likes "+count)
- }
+  function handlelike(scream_id, count) {
 
-function like(scream){
-  return "<button class='btn btn-danger' onclick=handlelike("+scream.id+
-           ","+scream.likes+")>Like</button> "
-}
+  }
 
- function formatscreams(scream){
+  function like(scream) {
+    return "<button class='btn btn-danger' onclick=handlelike(" + scream.id +
+      "," + scream.likes + ")>Like</button> "
+  }
 
-  var formated='<div class="mb-4 primary"><h2>' + scream.id + "</h1>" + "<h5>" + scream.caption + 
-    "</h5><p><div>"+like(scream) +"</div></p></div>"
+  function formatscreams(scream) {
+
+    var formated = '<div class="mb-4 primary"><h2>' + scream.id + "</h1>" + "<h5>" + scream.caption +
+      "</h5><p><div>" + like(scream) + "</div></p></div>"
     return formated
- }
- // xhr.responseType = responseType
+  }
+  // xhr.responseType = responseType
   xhr.open(method, url)
   xhr.onload = function () {
     if (this.readyState == 4 && this.status == 200) {
@@ -85,14 +183,14 @@ function like(scream){
       screamelement = document.getElementById("posts")
       var finalposts = ""
       for (x in myObj) {
-        console.log(myObj[x])
+
         var obj = myObj[x]
         var currentpost = formatscreams(obj)
         finalposts += currentpost
       }
       screamelement.innerHTML = finalposts
     }
-}
+  }
 
   xhr.send()
 </script>
